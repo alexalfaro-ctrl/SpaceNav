@@ -17,7 +17,7 @@ public class MenuScreen extends GenericScreen {
 		getCamera().update();
 		
 		if (Gdx.input.isTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
-			Screen ss = new PantallaJuego(getGame(),1,3,0,1,1,10);
+			Screen ss = new GameScreen(getGame(), 800, 640, 1, 3, 0, 1, 1, 10);
 			ss.resize(1200, 800);
 			getGame().setScreen(ss);
 			dispose();

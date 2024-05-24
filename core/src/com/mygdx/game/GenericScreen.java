@@ -2,17 +2,21 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public abstract class GenericScreen implements Screen {
 
 	private SpaceNavigation game;
 	private OrthographicCamera camera;
+	private float deltaTime;
 	
 	public GenericScreen(SpaceNavigation game, int width, int height) {
 		this.game = game;
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, width, height);
+		
+		deltaTime = 0;
 	}
 	
 	protected abstract void onUpdate(float delta);
@@ -24,6 +28,10 @@ public abstract class GenericScreen implements Screen {
 	
 	public OrthographicCamera getCamera() {
 		return camera;
+	}
+	
+	public SpriteBatch getBatch() {
+		return getGame().getBatch();
 	}
 	
 	public void updateProjectionMatrix() {
@@ -53,6 +61,14 @@ public abstract class GenericScreen implements Screen {
 	public void clearScreen(int r, int g, int b) {
 		ScreenUtils.clear(r/255.0f, g/255.0f, b/255.0f, 1);
 	}
+	
+	public void drawObject(IGameObject obj) {
+		obj.draw(getBatch());
+	}
+	
+	public void updateObject(IGameObject obj) {
+		obj.update(deltaTime);
+	}
 
 	@Override
 	public void show() {
@@ -62,6 +78,7 @@ public abstract class GenericScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		deltaTime = delta;
 		onUpdate(delta); // Lo sé...
 		onRender();
 	}
