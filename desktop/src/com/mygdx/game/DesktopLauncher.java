@@ -8,8 +8,8 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setForegroundFPS(60);
-		config.setTitle("SpaceNavigation");
+		config.setForegroundFPS(120);
+		config.setTitle("SpaceNav 2.0");
 		config.setWindowedMode(1200, 800);
 		new Lwjgl3Application(new SpaceNavigation(), config);
 	}

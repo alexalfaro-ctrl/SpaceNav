@@ -6,10 +6,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
-
-
 public class SpaceNavigation extends Game {
-	private String nombreJuego = "Space Navigation";
+
 	private SpriteBatch batch;
 	private BitmapFont font;
 	private int highScore;	
@@ -19,8 +17,12 @@ public class SpaceNavigation extends Game {
 		batch = new SpriteBatch();
 		font = new BitmapFont(); // usa Arial font x defecto
 		font.getData().setScale(2f);
-		Screen ss = new PantallaMenu(this);
-		this.setScreen(ss);
+		
+		//Screen startScreen = new PantallaMenu(this);
+		//this.setScreen(startScreen);
+		
+		Screen startScreen = new MenuScreen(this, 1200, 800);
+		this.setScreen(startScreen);
 	}
 
 	public void render() {
@@ -31,15 +33,16 @@ public class SpaceNavigation extends Game {
 		batch.dispose();
 		font.dispose();
 	}
-
+	
 	public SpriteBatch getBatch() {
 		return batch;
 	}
+	
 
 	public BitmapFont getFont() {
 		return font;
 	}
-
+	
 	public int getHighScore() {
 		return highScore;
 	}
@@ -47,7 +50,5 @@ public class SpaceNavigation extends Game {
 	public void setHighScore(int highScore) {
 		this.highScore = highScore;
 	}
-	
-	
 
 }
