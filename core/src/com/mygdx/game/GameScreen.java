@@ -128,6 +128,7 @@ public class GameScreen extends GenericScreen {
 		            //asteroide se destruye con el choque             
 	           balls1.remove(i);
 	           balls2.remove(i);
+	           nave.setHerido();
 	           i--;
 	        } 
 	    }

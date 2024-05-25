@@ -84,7 +84,16 @@ public class SpaceShip implements IGameObject {
 	        //Que no se salga de pantalla
 	        
 	        outOfBounds(delta);
+	        return;
     	}
+		herido=false;
+		long idSound = sonidoHerido.play();
+		sonidoHerido.setVolume(idSound,1f);
+		
+		vidas--;
+		if (vidas <=0)
+			this.destruida = true;
+			
 	}
     
     @Override
@@ -102,7 +111,7 @@ public class SpaceShip implements IGameObject {
     
     public boolean checkCollision(Ball2 b)
     {
-    	return false;
+    	return getCollision().overlaps(b.getCollision());
     }
     
     
@@ -112,6 +121,7 @@ public class SpaceShip implements IGameObject {
        return !herido && destruida;
     }
     
+    public void setHerido() {this.herido = true;}
     public boolean estaHerido() {
  	   return herido;
     }

@@ -63,6 +63,11 @@ public class Ball2 {
             b2.setySpeed(- b2.getySpeed()); 
         }
     }
+    
+    public Rectangle getCollision()
+    {
+    	return spr.getBoundingRectangle();
+    }
 	public int getXSpeed() {
 		return xSpeed;
 	}
