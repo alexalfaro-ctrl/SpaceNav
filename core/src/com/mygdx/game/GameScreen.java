@@ -83,17 +83,18 @@ public class GameScreen extends GenericScreen {
 		
 		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 			//Ajustar para que la bullet aparezca frente a la nave
-			Vector2 bulletPos = nave.getPosition();
+			Vector2 bulletPos = nave.getPosition(); 
 			Rectangle collision = nave.getCollision();
 			bulletPos.add(collision.width/5,collision.height);
 			agregarBala(new Bullet(bulletPos,nave.getVelocity(),100));
 		}  
 		
+		// actualizar movimiento de asteroides dentro del area
+	    for (Ball2 ball : balls1) {
+	    	ball.update();
+		}
 		
-		
-			
-		
-		if (balls1.size()==0) {
+		if (balls1.size() == 0) {
 			
 			Screen ss = new GameScreen(getGame(), 800, 640 ,ronda+1, nave.getVidas(), score, 
 					velXAsteroides+3, velYAsteroides+3, cantAsteroides+10);
@@ -110,7 +111,7 @@ public class GameScreen extends GenericScreen {
 		clearScreen(0, 0, 51);
 		
 		beginBatch();
-		dibujaEncabezado();
+		
 		
 	      //dibujar balas
 	     for (Bullet b : balas) {       
@@ -133,8 +134,8 @@ public class GameScreen extends GenericScreen {
 	        } 
 	    }
 	      
-	
-	    endBatch();
+	     dibujaEncabezado();
+	     endBatch();
 	}
 	
 	public void colisiones(float delta) {
@@ -161,11 +162,6 @@ public class GameScreen extends GenericScreen {
 		        i--; //para no saltarse 1 tras eliminar del arraylist
 		    }
 		 }
-		      
-	    // actualizar movimiento de asteroides dentro del area
-	    for (Ball2 ball : balls1) {
-	    	ball.update();
-		}
 		      
 	    //colisiones entre asteroides y sus rebotes  
 		for (int i=0;i<balls1.size();i++) {
