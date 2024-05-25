@@ -75,7 +75,7 @@ public class GameScreen extends GenericScreen {
 			if (score > getGame().getHighScore())
 				getGame().setHighScore(score);
 			
-	    	Screen ss = new PantallaGameOver(getGame());
+	    	Screen ss = new GameOverScreen(getGame(), 1200, 800);
 			ss.resize(1200, 800);
 			getGame().setScreen(ss);
 			dispose();
