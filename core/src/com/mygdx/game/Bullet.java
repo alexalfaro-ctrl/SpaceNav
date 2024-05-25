@@ -4,45 +4,48 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 
-public class Bullet {
+public class Bullet implements IGameObject {
 
-	private int xSpeed;
-	private int ySpeed;
+	private float speed;
+	private final Vector2 velocity;
+	private Vector2 position;
+	private Sprite sprite;
 	private boolean destroyed = false;
 	private Sprite spr;
 	    
-	    public Bullet(float x, float y, int xSpeed,float speed) {
-	    	spr = new Sprite(tx);
-	    	spr.setPosition(x, y);
-	        this.xSpeed = xSpeed;
-	        this.ySpeed = ySpeed;
-	    }
-	    public Bullet(float x, float y, int xSpeed) {
-	    	spr = new Sprite(tx);
-	    	spr.setPosition(x, y);
-	    	this.s
-	        this.xSpeed = xSpeed;
-	        this.ySpeed = ySpeed;
-	    }
-	    public void update() {
-	        spr.setPosition(spr.getX()+xSpeed, spr.getY()+ySpeed);
-	        if (spr.getX() < 0 || spr.getX()+spr.getWidth() > Gdx.graphics.getWidth()) {
-	            destroyed = true;
-	        }
-	        if (spr.getY() < 0 || spr.getY()+spr.getHeight() > Gdx.graphics.getHeight()) {
-	        	destroyed = true;
-	        }
-	        
+	    public Bullet(Vector2 position, Vector2 velocity,float speed) {
+	    	//Set sprite and assets
+	    	System.out.println("position");
+	    	sprite = new Sprite(new Texture(Gdx.files.internal("Rocket2.png")));
+	    	
+	    	this.position = position;
+	    	sprite.setPosition(position.x,position.y);
+	    	//Give initial velocity to keep the momentum of player
+	    	this.velocity = velocity;
+	    	this.speed= speed;
 	    }
 	    
+	    
+	    @Override
 	    public void draw(SpriteBatch batch) {
-	    	spr.draw(batch);
+	    	sprite.draw(batch);
+	    	sprite.setPosition(position.x,position.y);
 	    }
+	    
+	    @Override
+		public void update(float delta) {
+	    	
+	    	//Change position by velocity
+			position.add(velocity.add(0,speed*delta));
+			
+		}
 	    
 	    public boolean checkCollision(Ball2 b2) {
-	        if(spr.getBoundingRectangle().overlaps(b2.getArea())){
+	        if(this.getCollision().overlaps(b2.getArea())){
 	        	// Se destruyen ambos
 	            this.destroyed = true;
 	            return true;
@@ -52,5 +55,22 @@ public class Bullet {
 	    }
 	    
 	    public boolean isDestroyed() {return destroyed;}
+		
+
+
+
+		@Override
+		public Vector2 getPosition() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+
+
+		@Override
+		public Rectangle getCollision() {
+			// TODO Auto-generated method stub
+			return sprite.getBoundingRectangle();
+		}
 	
 }

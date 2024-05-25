@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 public class GameScreen extends GenericScreen {
 
 	private Sound explosionSound;
@@ -46,7 +48,7 @@ public class GameScreen extends GenericScreen {
 		gameMusic.play();
 		
 	    // cargar imagen de la nave, 64x64   
-	    nave = new SpaceShip(Gdx.graphics.getWidth()/2-50,30, this); 
+	    nave = new SpaceShip(Gdx.graphics.getWidth()/2-50,30); 
 	    
         nave.setVidas(vidas);
         
@@ -65,8 +67,10 @@ public class GameScreen extends GenericScreen {
 	@Override
 	protected void onUpdate(float delta) {
 		
-		colisiones();
+		colisiones(delta);
 		nave.update(delta);
+		
+		
 		if (nave.estaDestruido()) {
 			if (score > getGame().getHighScore())
 				getGame().setHighScore(score);
@@ -76,6 +80,18 @@ public class GameScreen extends GenericScreen {
 			getGame().setScreen(ss);
 			dispose();
 		}
+		
+		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+			//Ajustar para que la bullet aparezca frente a la nave
+			Vector2 bulletPos = nave.getPosition();
+			Rectangle collision = nave.getCollision();
+			bulletPos.add(collision.width/5,collision.height);
+			agregarBala(new Bullet(bulletPos,nave.getVelocity(),100));
+		}  
+		
+		
+		
+			
 		
 		if (balls1.size()==0) {
 			
@@ -120,13 +136,13 @@ public class GameScreen extends GenericScreen {
 	    endBatch();
 	}
 	
-	public void colisiones() {
+	public void colisiones(float delta) {
 		if (nave.estaHerido()) return;
 		
 		// colisiones entre balas y asteroides y su destruccion  
 	    for (int i = 0; i < balas.size(); i++) {
 	    	Bullet b = balas.get(i);
-		    b.update();
+		    b.update(delta);
 		    
 		    for (int j = 0; j < balls1.size(); j++) {    
 		    	if (b.checkCollision(balls1.get(j))) {          

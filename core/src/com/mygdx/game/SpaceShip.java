@@ -16,6 +16,7 @@ public class SpaceShip implements IGameObject {
 	
     private int vidas = 3;
     private float speed;
+    private Vector2 velocity;
     private Sprite sprite;
     private Sound sonidoHerido;
     private boolean destruida = false;
@@ -24,10 +25,10 @@ public class SpaceShip implements IGameObject {
     private int tiempoHerido;
     
     private Vector2 position;
-    private GameScreen screen;
     
-    public SpaceShip(int posX, int posY,GameScreen screen) {
-    	this.screen = screen;
+    
+    public SpaceShip(int posX, int posY) {
+    	
     	this.sonidoHerido = Gdx.audio.newSound(Gdx.files.internal("explosion.ogg"));
     	sprite = new Sprite(new Texture(Gdx.files.internal("SpaceShip.png")));
     	this.position = new Vector2(posX,posY);
@@ -52,7 +53,7 @@ public class SpaceShip implements IGameObject {
         return inputVector;
     }
     
-    private void outOfBounds(float delta)
+    private void outOfBounds(float delta) //Se preocupa solamente de sus propios inputs
     {
     	final Rectangle collision = sprite.getBoundingRectangle();
     	if (0 >= collision.getX())
@@ -67,14 +68,16 @@ public class SpaceShip implements IGameObject {
 
         
     }
+    
+    
     @Override
 	public void update(float delta) {
 		
     	if (!herido) {
 	        // que se mueva con teclado
 	        Vector2 inputVector = keyboardInput();
-	        Vector2 velocity =inputVector.scl(speed*delta);
-	        System.out.println("Input: "+inputVector+"Velocity "+velocity);
+	        velocity =inputVector.scl(speed*delta);
+	        
 	        //ApplyVelocity
 	        position = position.add(velocity);
 	        
@@ -101,7 +104,8 @@ public class SpaceShip implements IGameObject {
     {
     	return false;
     }
-      
+    
+    
     
     
     public boolean estaDestruido() {
@@ -117,5 +121,19 @@ public class SpaceShip implements IGameObject {
     public int getY() {return (int) position.y;}
 	public void setVidas(int vidas) {this.vidas = vidas;}
 	public void setSpeed(float speed) {this.speed=speed;}
+	public Vector2 getVelocity() {return (Vector2) this.velocity;}
+
+	@Override
+	public Vector2 getPosition() {
+		// TODO Auto-generated method stub
+		return this.position.cpy();
+	}
+
+
+	@Override
+	public Rectangle getCollision() {
+		// TODO Auto-generated method stub
+		return sprite.getBoundingRectangle();
+	}
 	
 }
