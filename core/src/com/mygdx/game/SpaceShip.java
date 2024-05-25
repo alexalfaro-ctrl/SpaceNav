@@ -52,6 +52,21 @@ public class SpaceShip implements IGameObject {
         return inputVector;
     }
     
+    private void outOfBounds(float delta)
+    {
+    	final Rectangle collision = sprite.getBoundingRectangle();
+    	if (0 >= collision.getX())
+    		position.add(new Vector2(speed*delta,0));
+        else if (Gdx.graphics.getWidth() <= collision.getX()+collision.width)
+        	position.add(new Vector2(-speed*delta,0));
+    	
+    	if ( 0 >= collision.getY())
+    		position.add(new Vector2(0,speed*delta));
+    	else if ( Gdx.graphics.getHeight() <= collision.getY()-collision.height)
+    		position.add(new Vector2(0,-speed*delta));
+
+        
+    }
     @Override
 	public void update(float delta) {
 		
@@ -64,13 +79,9 @@ public class SpaceShip implements IGameObject {
 	        position = position.add(velocity);
 	        
 	        //Que no se salga de pantalla
-	        final Rectangle screenBounds = new Rectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-	        if (screenBounds.getX() > position.x)
-	        	position.add(inputVector.scl(-1));
-	        else if (screenBounds.getX()+screenBounds.getWidth() < position.x)
-	        	position.add(inputVector.scl(-1));
-	        }
 	        
+	        outOfBounds(delta);
+    	}
 	}
     
     @Override

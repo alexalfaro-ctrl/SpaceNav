@@ -13,9 +13,16 @@ public class Bullet {
 	private boolean destroyed = false;
 	private Sprite spr;
 	    
-	    public Bullet(float x, float y, int xSpeed, int ySpeed, Texture tx) {
+	    public Bullet(float x, float y, int xSpeed,float speed) {
 	    	spr = new Sprite(tx);
 	    	spr.setPosition(x, y);
+	        this.xSpeed = xSpeed;
+	        this.ySpeed = ySpeed;
+	    }
+	    public Bullet(float x, float y, int xSpeed) {
+	    	spr = new Sprite(tx);
+	    	spr.setPosition(x, y);
+	    	this.s
 	        this.xSpeed = xSpeed;
 	        this.ySpeed = ySpeed;
 	    }
