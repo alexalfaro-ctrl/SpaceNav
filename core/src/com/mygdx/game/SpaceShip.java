@@ -8,103 +8,90 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 public class SpaceShip implements IGameObject {
 	
-	private boolean destruida = false;
+	
     private int vidas = 3;
-    private float xVel = 0;
-    private float yVel = 0;
-    private Sprite spr;
+    private float speed;
+    private Sprite sprite;
     private Sound sonidoHerido;
-    private Sound soundBala;
-    private Texture txBala;
+    private boolean destruida = false;
     private boolean herido = false;
     private int tiempoHeridoMax = 50;
     private int tiempoHerido;
+    
+    private Vector2 position;
     private GameScreen screen;
     
-    public SpaceShip(int x, int y, Texture tx, Sound soundChoque, Texture txBala, Sound soundBala, GameScreen screen) {
+    public SpaceShip(int posX, int posY,GameScreen screen) {
     	this.screen = screen;
-    	sonidoHerido = soundChoque;
-    	this.soundBala = soundBala;
-    	this.txBala = txBala;
-    	spr = new Sprite(tx);
-    	spr.setPosition(x, y);
+    	this.sonidoHerido = Gdx.audio.newSound(Gdx.files.internal("explosion.ogg"));
+    	sprite = new Sprite(new Texture(Gdx.files.internal("SpaceShip.png")));
+    	this.position = new Vector2(posX,posY);
+    	sprite.setPosition(position.x,position.y);
     	//spr.setOriginCenter();
-    	spr.setBounds(x, y, 45, 45);
+    	sprite.setBounds(position.x, position.y, 45, 45);
+    	
+    	//
+    	this.speed= 200f;
 
+    }
+    
+    
+    private Vector2 keyboardInput()
+    {
+    	Vector2 inputVector = new Vector2();    	
+    	if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) inputVector.x +=(-1);
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))inputVector.x +=(1);
+    	if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) inputVector.y +=(-1);     
+        if (Gdx.input.isKeyPressed(Input.Keys.UP))   inputVector.y +=(1);
+    	//Returns a boolean vector wich indicates velocity added.
+        return inputVector;
     }
     
     @Override
 	public void update(float delta) {
-		// TODO Auto-generated method stub
 		
+    	if (!herido) {
+	        // que se mueva con teclado
+	        Vector2 inputVector = keyboardInput();
+	        Vector2 velocity =inputVector.scl(speed*delta);
+	        System.out.println("Input: "+inputVector+"Velocity "+velocity);
+	        //ApplyVelocity
+	        position = position.add(velocity);
+	        
+	        //Que no se salga de pantalla
+	        final Rectangle screenBounds = new Rectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+	        if (screenBounds.getX() > position.x)
+	        	position.add(inputVector.scl(-1));
+	        else if (screenBounds.getX()+screenBounds.getWidth() < position.x)
+	        	position.add(inputVector.scl(-1));
+	        }
+	        
 	}
     
     @Override
     public void draw(SpriteBatch batch){
-        float x =  spr.getX();
-        float y =  spr.getY();
-        if (!herido) {
-	        // que se mueva con teclado
-	        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) xVel--;
-	        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) xVel++;
-        	if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) yVel--;     
-	        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) yVel++;
-
-	        // que se mantenga dentro de los bordes de la ventana
-	        if (x+xVel < 0 || x+xVel+spr.getWidth() > Gdx.graphics.getWidth())
-	        	xVel*=-1;
-	        
-	        if (y+yVel < 0 || y+yVel+spr.getHeight() > Gdx.graphics.getHeight())
-	        	yVel*=-1;
-	        
-	        spr.setPosition(x+xVel, y+yVel);   
-         
- 		    spr.draw(batch);
-        } else {
-           spr.setX(spr.getX()+MathUtils.random(-2,2));
- 		   spr.draw(batch); 
- 		  spr.setX(x);
- 		   tiempoHerido--;
- 		   if (tiempoHerido<=0) herido = false;
- 		}
         
+    	//Sets the new position calculated.
+        sprite.setX(position.x);
+        sprite.setY(position.y);
+        sprite.draw(batch);
         // disparo
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {         
-        	Bullet  bala = new Bullet(spr.getX()+spr.getWidth()/2-5,spr.getY()+ spr.getHeight()-5,0,3,txBala);
-        	screen.agregarBala(bala);
-	    	soundBala.play();
-        }
         
+
+        
+    }
+    
+    public boolean checkCollision(Ball2 b)
+    {
+    	return false;
     }
       
-    public boolean checkCollision(Ball2 b) {
-        if(!herido && b.getArea().overlaps(spr.getBoundingRectangle())){
-        	// rebote
-            if (xVel ==0) xVel += b.getXSpeed()/2;
-            if (b.getXSpeed() ==0) b.setXSpeed(b.getXSpeed() + (int)xVel/2);
-            xVel = - xVel;
-            b.setXSpeed(-b.getXSpeed());
-            
-            if (yVel ==0) yVel += b.getySpeed()/2;
-            if (b.getySpeed() ==0) b.setySpeed(b.getySpeed() + (int)yVel/2);
-            yVel = - yVel;
-            b.setySpeed(- b.getySpeed());
-            vidas--;
-            herido = true;
-  		    tiempoHerido=tiempoHeridoMax;
-  		    sonidoHerido.play();
-  		    
-            if (vidas<=0) {
-          	    destruida = true;
-            }
-            
-            return true;
-        }
-        return false;
-    }
+    
     
     public boolean estaDestruido() {
        return !herido && destruida;
@@ -115,8 +102,9 @@ public class SpaceShip implements IGameObject {
     }
     
     public int getVidas() {return vidas;}
-    public int getX() {return (int) spr.getX();}
-    public int getY() {return (int) spr.getY();}
-	public void setVidas(int vidas2) {vidas = vidas2;}
+    public int getX() {return (int) position.x;}
+    public int getY() {return (int) position.y;}
+	public void setVidas(int vidas) {this.vidas = vidas;}
+	public void setSpeed(float speed) {this.speed=speed;}
 	
 }

@@ -46,10 +46,7 @@ public class GameScreen extends GenericScreen {
 		gameMusic.play();
 		
 	    // cargar imagen de la nave, 64x64   
-	    nave = new SpaceShip(Gdx.graphics.getWidth()/2-50,30,new Texture(Gdx.files.internal("MainShip3.png")),
-	    				Gdx.audio.newSound(Gdx.files.internal("hurt.ogg")), 
-	    				new Texture(Gdx.files.internal("Rocket2.png")), 
-	    				Gdx.audio.newSound(Gdx.files.internal("pop-sound.mp3")), this); 
+	    nave = new SpaceShip(Gdx.graphics.getWidth()/2-50,30, this); 
 	    
         nave.setVidas(vidas);
         
@@ -69,7 +66,7 @@ public class GameScreen extends GenericScreen {
 	protected void onUpdate(float delta) {
 		
 		colisiones();
-		
+		nave.update(delta);
 		if (nave.estaDestruido()) {
 			if (score > getGame().getHighScore())
 				getGame().setHighScore(score);
