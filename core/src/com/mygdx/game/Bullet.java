@@ -44,8 +44,8 @@ public class Bullet implements IGameObject {
 			
 		}
 	    
-	    public boolean checkCollision(Ball2 b2) {
-	        if(this.getCollision().overlaps(b2.getArea())){
+	    public boolean checkCollision(Asteroid b2) {
+	        if(this.getCollision().overlaps(b2.getCollision())){
 	        	// Se destruyen ambos
 	            this.destroyed = true;
 	            return true;

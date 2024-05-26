@@ -23,8 +23,7 @@ public class GameScreen extends GenericScreen {
 	private int cantAsteroides;
 	
 	private SpaceShip nave;
-	private ArrayList<Ball2> balls1 = new ArrayList<>();
-	private ArrayList<Ball2> balls2 = new ArrayList<>();
+	private ArrayList<Asteroid> asteroides = new ArrayList<>();
 	private ArrayList<Bullet> balas = new ArrayList<>();
 	
 	public GameScreen(SpaceNavigation game, int width, int height, int ronda, int vidas, int score,  
@@ -54,14 +53,13 @@ public class GameScreen extends GenericScreen {
         
         //crear asteroides
         Random r = new Random();
-	    for (int i = 0; i < cantAsteroides; i++) {
-	        Ball2 bb = new Ball2(r.nextInt((int)Gdx.graphics.getWidth()),
-	  	            50+r.nextInt((int)Gdx.graphics.getHeight()-50),
-	  	            20+r.nextInt(10), velXAsteroides+r.nextInt(4), velYAsteroides+r.nextInt(4), 
-	  	            new Texture(Gdx.files.internal("aGreyMedium4.png")));	   
-	  	    balls1.add(bb);
-	  	    balls2.add(bb);
-	  	}
+        for (int i = 0; i < cantAsteroides; i++) {
+            Vector2 position = new Vector2(r.nextInt((int) Gdx.graphics.getWidth()),
+                    50 + r.nextInt((int) Gdx.graphics.getHeight() - 50));
+            Vector2 velocity = new Vector2(velXAsteroides + r.nextInt(4), velYAsteroides + r.nextInt(4));
+            Asteroid asteroid = new Asteroid(position, velocity, 100); // Velocidad arbitraria, ajustar según necesidad
+            asteroides.add(asteroid);
+        }
 	}
 
 	@Override
@@ -90,11 +88,11 @@ public class GameScreen extends GenericScreen {
 		}  
 		
 		// actualizar movimiento de asteroides dentro del area
-	    for (Ball2 ball : balls1) {
-	    	ball.update();
+	    for (Asteroid asteroid : asteroides) {
+	    	asteroid.update(delta);
 		}
 		
-		if (balls1.size() == 0) {
+		if (asteroides.isEmpty()) {
 			
 			Screen ss = new GameScreen(getGame(), 800, 640 ,ronda+1, nave.getVidas(), score, 
 					velXAsteroides+3, velYAsteroides+3, cantAsteroides+10);
@@ -121,16 +119,14 @@ public class GameScreen extends GenericScreen {
 	     drawObject(nave);
 	     
 	     //dibujar asteroides y manejar colision con nave
-	     for (int i = 0; i < balls1.size(); i++) {
-	    	Ball2 b=balls1.get(i);
-	    	b.draw(getBatch());
+	     for (Asteroid asteroid : asteroides) {
+	    	asteroid.draw(getBatch());
 		          //perdió vida o game over
-	        if (nave.checkCollision(b)) {
-		            //asteroide se destruye con el choque             
-	           balls1.remove(i);
-	           balls2.remove(i);
+	        if (nave.checkCollision(asteroid)) {
+		            //asteroide se destruye con el choque 
+	           asteroides.remove(asteroid);
 	           nave.setHerido();
-	           i--;
+	           break;
 	        } 
 	    }
 	      
@@ -146,13 +142,14 @@ public class GameScreen extends GenericScreen {
 	    	Bullet b = balas.get(i);
 		    b.update(delta);
 		    
-		    for (int j = 0; j < balls1.size(); j++) {    
-		    	if (b.checkCollision(balls1.get(j))) {          
+		    for (int j = 0; j <asteroides.size(); j++) {  
+		    	Asteroid asteroid = asteroides.get(j);
+		    	if (b.checkCollision(asteroides.get(j))) {          
 		            	 explosionSound.play();
-		            	 balls1.remove(j);
-		            	 balls2.remove(j);
-		            	 j--;
+		            	 asteroides.remove(asteroid);
 		            	 score +=10;
+		            	 break;
+		            	 
 		         }   	  
 		  	}
 		                
@@ -164,13 +161,14 @@ public class GameScreen extends GenericScreen {
 		 }
 		      
 	    //colisiones entre asteroides y sus rebotes  
-		for (int i=0;i<balls1.size();i++) {
-			Ball2 ball1 = balls1.get(i);   
-		    for (int j=0;j<balls2.size();j++) {
-		    	Ball2 ball2 = balls2.get(j); 
+		for (int i=0;i<asteroides.size();i++) {
+			Asteroid asteroid1 = asteroides.get(i);   
+		    for (int j=0;j<asteroides.size();j++) {
+		    	Asteroid asteroid2 = asteroides.get(j); 
 		    	
-		    	if (i < j) {
-		    		ball1.checkCollision(ball2);
+		    	if (asteroid1.getCollision().overlaps(asteroid2.getCollision())) {
+		    		asteroid1.invertirDireccion();
+		    		asteroid2.invertirDireccion();
 		    	}
 		    }
 		}   

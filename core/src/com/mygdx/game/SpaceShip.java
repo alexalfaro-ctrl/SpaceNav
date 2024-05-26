@@ -109,7 +109,7 @@ public class SpaceShip implements IGameObject {
         
     }
     
-    public boolean checkCollision(Ball2 b)
+    public boolean checkCollision(Asteroid b)
     {
     	return getCollision().overlaps(b.getCollision());
     }
