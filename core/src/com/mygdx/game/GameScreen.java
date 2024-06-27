@@ -61,7 +61,11 @@ public class GameScreen extends GenericScreen {
             asteroides.add(asteroid);
         }
 	}
-
+	
+	public static GameScreen getInstance(SpaceNavigation game, int width, int height, int ronda, int vidas, int score,
+            int velXAsteroides, int velYAsteroides, int cantAsteroides) {
+        return new GameScreen(game, width, height, ronda, vidas, score, velXAsteroides, velYAsteroides, cantAsteroides);
+    }
 	@Override
 	protected void onUpdate(float delta) {
 		

@@ -17,10 +17,13 @@ public class MenuScreen extends GenericScreen {
 		getCamera().update();
 		
 		if (Gdx.input.isTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
-			Screen ss = new GameScreen(getGame(), 800, 640, 1, 3, 0, 1, 1, 10);
-			ss.resize(1200, 800);
-			getGame().setScreen(ss);
-			dispose();
+			
+			SpaceShip nave = SpaceShip.getInstance(Gdx.graphics.getWidth() / 2 - 50, 30);
+			
+			Screen ss = GameScreen.getInstance(getGame(), 800, 640, 1, nave.getVidas(), 0, 1, 1, 10);
+            ss.resize(1200, 800);
+            getGame().setScreen(ss);
+            dispose();
 		}
 	}
 	

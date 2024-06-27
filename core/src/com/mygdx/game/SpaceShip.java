@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class SpaceShip implements IGameObject {
-	
+	private static SpaceShip instance;
 	
     private int vidas = 3;
     private float speed;
@@ -53,6 +53,13 @@ public class SpaceShip implements IGameObject {
         return inputVector;
     }
     
+    public static SpaceShip getInstance(int posX, int posY) {
+        if (instance == null) {
+            instance = new SpaceShip(posX, posY);
+        }
+        return instance;
+    }
+    
     private void outOfBounds(float delta) //Se preocupa solamente de sus propios inputs
     {
     	final Rectangle collision = sprite.getBoundingRectangle();
@@ -68,7 +75,6 @@ public class SpaceShip implements IGameObject {
 
         
     }
-    
     
     @Override
 	public void update(float delta) {
