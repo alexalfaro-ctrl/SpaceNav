@@ -47,7 +47,7 @@ public class GameScreen extends GenericScreen {
 		gameMusic.play();
 		
 	    // cargar imagen de la nave, 64x64   
-	    nave = new SpaceShip(Gdx.graphics.getWidth()/2-50,30); 
+		nave = SpaceShip.getInstance(width / 2 - 50, 30);
 	    
         nave.setVidas(vidas);
         
@@ -61,6 +61,7 @@ public class GameScreen extends GenericScreen {
             asteroides.add(asteroid);
         }
 	}
+	
 	
 	public static GameScreen getInstance(SpaceNavigation game, int width, int height, int ronda, int vidas, int score,
             int velXAsteroides, int velYAsteroides, int cantAsteroides) {
@@ -80,6 +81,7 @@ public class GameScreen extends GenericScreen {
 	    	Screen ss = new GameOverScreen(getGame(), 1200, 800);
 			ss.resize(1200, 800);
 			getGame().setScreen(ss);
+			//nave.reset();
 			dispose();
 		}
 		

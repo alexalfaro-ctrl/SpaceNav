@@ -27,7 +27,7 @@ public class SpaceShip implements IGameObject {
     private Vector2 position;
     
     
-    public SpaceShip(int posX, int posY) {
+    private SpaceShip(int posX, int posY) {
     	
     	this.sonidoHerido = Gdx.audio.newSound(Gdx.files.internal("explosion.ogg"));
     	sprite = new Sprite(new Texture(Gdx.files.internal("SpaceShip.png")));
@@ -58,6 +58,10 @@ public class SpaceShip implements IGameObject {
             instance = new SpaceShip(posX, posY);
         }
         return instance;
+    }
+    
+    public static void reset() {
+        instance = null; // Elimina la instancia actual
     }
     
     private void outOfBounds(float delta) //Se preocupa solamente de sus propios inputs
