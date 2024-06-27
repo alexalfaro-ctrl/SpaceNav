@@ -57,7 +57,7 @@ public class GameScreen extends GenericScreen {
             Vector2 position = new Vector2(r.nextInt((int) Gdx.graphics.getWidth()),
                     50 + r.nextInt((int) Gdx.graphics.getHeight() - 50));
             Vector2 velocity = new Vector2(velXAsteroides + r.nextInt(4), velYAsteroides + r.nextInt(4));
-            Asteroid asteroid = new Asteroid(position, velocity, 100); // Velocidad arbitraria, ajustar según necesidad
+            Asteroid asteroid = new Asteroid(position, velocity, 100,2); // Velocidad arbitraria, ajustar según necesidad
             asteroides.add(asteroid);
         }
 	}
@@ -144,12 +144,17 @@ public class GameScreen extends GenericScreen {
 		    
 		    for (int j = 0; j <asteroides.size(); j++) {  
 		    	Asteroid asteroid = asteroides.get(j);
-		    	if (b.checkCollision(asteroides.get(j))) {          
+		    	if (b.checkCollision(asteroid)) {
+		    			 asteroid.setHerido();
 		            	 explosionSound.play();
-		            	 asteroides.remove(asteroid);
-		            	 score +=10;
-		            	 break;
-		            	 
+		            	 if(asteroid.estaDestruido()) {
+		            		 asteroides.remove(asteroid);
+			            	 score +=10;
+			            	 break;
+			            	 
+		            		 
+		            	 }
+		            	
 		         }   	  
 		  	}
 		                
