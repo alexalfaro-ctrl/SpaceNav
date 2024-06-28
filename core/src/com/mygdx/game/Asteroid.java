@@ -17,9 +17,10 @@ public class Asteroid implements IGameObject {
 	private boolean herido = false;
 	private boolean destruida = false;
 	
-	public Asteroid(Vector2 position, Vector2 velocity,float speed ,int vidas) {
+	 Asteroid(Vector2 position, Vector2 velocity,float speed ,int vidas,Sprite sprite) {
 		this.vidas=vidas;
-		sprite=new Sprite(new Texture(Gdx.files.internal("aGreyMedium4.png")));
+		this.sprite=sprite;
+		//sprite=new Sprite(new Texture(Gdx.files.internal("aGreyMedium4.png")));
 		this.position = position;
     	sprite.setPosition(position.x,position.y);
     	this.velocity = velocity;
