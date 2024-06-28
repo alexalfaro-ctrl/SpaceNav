@@ -27,11 +27,13 @@ public class SpaceShip implements IGameObject {
     private Vector2 position;
     
     
-    private SpaceShip(int posX, int posY) {
+    private SpaceShip() {
     	
     	this.sonidoHerido = Gdx.audio.newSound(Gdx.files.internal("explosion.ogg"));
     	sprite = new Sprite(new Texture(Gdx.files.internal("SpaceShip.png")));
-    	this.position = new Vector2(posX,posY);
+    	float initialX = (Gdx.graphics.getWidth() - sprite.getWidth()) / 2;
+        float initialY = 0;
+    	this.position = new Vector2(initialX,initialY );
     	sprite.setPosition(position.x,position.y);
     	//spr.setOriginCenter();
     	sprite.setBounds(position.x, position.y, 45, 45);
@@ -53,9 +55,9 @@ public class SpaceShip implements IGameObject {
         return inputVector;
     }
     
-    public static SpaceShip getInstance(int posX, int posY) {
+    public static SpaceShip getInstance() {
         if (instance == null) {
-            instance = new SpaceShip(posX, posY);
+            instance = new SpaceShip();
         }
         return instance;
     }

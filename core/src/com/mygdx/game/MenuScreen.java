@@ -18,7 +18,7 @@ public class MenuScreen extends GenericScreen {
 		
 		if (Gdx.input.isTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
 			
-			SpaceShip nave = SpaceShip.getInstance(Gdx.graphics.getWidth() / 2 - 50, 30);
+			SpaceShip nave = SpaceShip.getInstance();
 			
 			Screen ss = GameScreen.getInstance(getGame(), 800, 640, 1, nave.getVidas(), 0, 1, 1, 10);
             ss.resize(1200, 800);

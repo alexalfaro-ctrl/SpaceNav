@@ -48,8 +48,9 @@ public class GameScreen extends GenericScreen {
 	gameMusic.setVolume(0.5f);
 	gameMusic.play();
 		
-	// cargar imagen de la nave, 64x64   
-	nave = SpaceShip.getInstance(width / 2 - 50, 30);
+	    // cargar imagen de la nave, 64x64   
+		nave = SpaceShip.getInstance();
+	    
         nave.setVidas(vidas);
         
         //crear asteroides
@@ -72,18 +73,26 @@ public class GameScreen extends GenericScreen {
     @Override
     protected void onUpdate(float delta) {
 		
-        colisiones2(delta);
+        colisiones(delta);
 	nave.update(delta);
 			
+
 	if (nave.estaDestruido()) {
-            if (score > getGame().getHighScore())
-		getGame().setHighScore(score);
-			
-	Screen ss = new GameOverScreen(getGame(), 1200, 800);
-                ss.resize(1200, 800);
-		getGame().setScreen(ss);
-		//nave.reset();
-		dispose();
+            
+            if (score > getGame().getHighScore()) {
+                getGame().setHighScore(score);
+            }
+
+	    Screen ss = new GameOverScreen(getGame(), 1200, 800);
+            ss.resize(1200, 800);
+            getGame().setScreen(ss);
+            nave.reset();
+            dispose();
+        }
+		
+	// actualizar movimiento de asteroides dentro del area
+	for (Asteroid asteroid : asteroides) {
+	    asteroid.update(delta);
 	}
                 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -91,11 +100,11 @@ public class GameScreen extends GenericScreen {
             Vector2 bulletPos = nave.getPosition(); 
             Rectangle collision = nave.getCollision();
             bulletPos.add(collision.width/5,collision.height);
-                        
+
             agregarBala(new NormalProjectile(bulletPos, nave.getVelocity(), 100));
 	}
 		
-	// actualizar movimiento de asteroides dentro del area
+        // actualizar movimiento de asteroides dentro del area
 	for (Asteroid asteroid : asteroides) {
 	    asteroid.update(delta);
         }
@@ -107,7 +116,7 @@ public class GameScreen extends GenericScreen {
             ss.resize(1200, 800);
             getGame().setScreen(ss);
             dispose();
-	}
+        }
     }
 
     @Override
@@ -139,7 +148,7 @@ public class GameScreen extends GenericScreen {
 	endBatch();
     }
     
-    public void colisiones2(float delta) {
+    public void colisiones(float delta) {
 	
         if (nave.estaHerido()) return;
 		
