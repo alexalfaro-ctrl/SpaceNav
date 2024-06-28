@@ -30,6 +30,7 @@ public class Asteroid implements IGameObject {
 
 
 	}
+	 
 	@Override
 	public void update(float delta) {
 		

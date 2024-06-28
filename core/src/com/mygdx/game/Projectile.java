@@ -14,7 +14,7 @@ public abstract class Projectile implements IGameObject {
     private float speed;
     
     public abstract void onCollision();
-    public abstract Projectile create();
+    public abstract Projectile create(Vector2 pos);
     
     public boolean checkCollision(Asteroid b2) {
          
@@ -29,11 +29,12 @@ public abstract class Projectile implements IGameObject {
     
     public void update(float delta) {
         position.add(velocity.add(0, speed * delta));
+        
     }
     
     public void draw(SpriteBatch batch) {
         sprite.draw(batch);
-	sprite.setPosition(position.x,position.y);
+        sprite.setPosition(position.x,position.y);
     }
     
     public void setSpeed(float speed) {

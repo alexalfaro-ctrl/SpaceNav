@@ -31,22 +31,22 @@ public class GameScreen extends GenericScreen {
     public GameScreen(SpaceNavigation game, int width, int height, int ronda, int vidas, int score,  
 			int velXAsteroides, int velYAsteroides, int cantAsteroides)
     {
-	super(game, width, height);
+    	super(game, width, height);
 		
-	this.ronda = ronda;
-	this.score = score;
-	this.velXAsteroides = velXAsteroides;
-	this.velYAsteroides = velYAsteroides;
-	this.cantAsteroides = cantAsteroides;
+    	this.ronda = ronda;
+    	this.score = score;
+    	this.velXAsteroides = velXAsteroides;
+    	this.velYAsteroides = velYAsteroides;
+    	this.cantAsteroides = cantAsteroides;
 	
-	//inicializar assets; musica de fondo y efectos de sonido
-	explosionSound = Gdx.audio.newSound(Gdx.files.internal("explosion.ogg"));
-	explosionSound.setVolume(1,0.5f);
-	gameMusic = Gdx.audio.newMusic(Gdx.files.internal("piano-loops.wav")); //
+    	//inicializar assets; musica de fondo y efectos de sonido
+    	explosionSound = Gdx.audio.newSound(Gdx.files.internal("explosion.ogg"));
+    	explosionSound.setVolume(1,0.5f);
+    	gameMusic = Gdx.audio.newMusic(Gdx.files.internal("piano-loops.wav")); //
 		
-	gameMusic.setLooping(true);
-	gameMusic.setVolume(0.5f);
-	gameMusic.play();
+    	gameMusic.setLooping(true);
+    	gameMusic.setVolume(0.5f);
+    	gameMusic.play();
 		
 	    // cargar imagen de la nave, 64x64   
 		nave = SpaceShip.getInstance();
@@ -67,6 +67,8 @@ public class GameScreen extends GenericScreen {
             asteroides.add(asteroid);
             //asteroides.add(asteroid2);
         }
+        
+        nave.setProjectile( new NormalProjectile(Vector2.Zero, nave.getVelocity(), 100));
     }
     
     // TODO: Fix this crap
@@ -99,14 +101,19 @@ public class GameScreen extends GenericScreen {
 	for (Asteroid asteroid : asteroides) {
 	    asteroid.update(delta);
 	}
-                
+        
+		//spawnear bullets
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             //Ajustar para que la bullet aparezca frente a la nave
             Vector2 bulletPos = nave.getPosition(); 
             Rectangle collision = nave.getCollision();
             bulletPos.add(collision.width/5,collision.height);
+            
+            nave.getProjectile().setPosition(bulletPos);
+            nave.getProjectile().setVelocity(nave.getVelocity());
+            nave.getProjectile().setSpeed(100);
 
-            agregarBala(new NormalProjectile(bulletPos, nave.getVelocity(), 100));
+            agregarBala(nave.getProjectile().create(bulletPos));
 	}
 		
         // actualizar movimiento de asteroides dentro del area

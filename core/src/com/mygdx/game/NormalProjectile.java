@@ -9,12 +9,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
-/**
- *
- * @author estellar
- */
 public class NormalProjectile extends Projectile {
-    
+	
     NormalProjectile(Vector2 position, Vector2 velocity, float speed) {
         
         setSprite(new Sprite(new Texture(Gdx.files.internal("Rocket2.png"))));
@@ -29,8 +25,8 @@ public class NormalProjectile extends Projectile {
     }
     
     @Override
-    public Projectile create() {
-        return new NormalProjectile(getPosition(), getVelocity(), getSpeed());
+    public Projectile create(Vector2 pos) {
+        return new NormalProjectile(pos, getVelocity(), getSpeed());
     }
 }
 

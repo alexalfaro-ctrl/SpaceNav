@@ -25,6 +25,7 @@ public class SpaceShip implements IGameObject {
     private int tiempoHerido;
     
     private Vector2 position;
+    private Projectile proyectile;
     
     
     private SpaceShip() {
@@ -150,12 +151,20 @@ public class SpaceShip implements IGameObject {
 		// TODO Auto-generated method stub
 		return this.position.cpy();
 	}
-
+ 
 
 	@Override
 	public Rectangle getCollision() {
 		// TODO Auto-generated method stub
 		return sprite.getBoundingRectangle();
+	}
+	
+	public void setProjectile(Projectile p) {
+		proyectile = p;
+	}
+	
+	public Projectile getProjectile() {
+		return proyectile;
 	}
 	
 }
