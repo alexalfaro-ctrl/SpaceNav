@@ -25,6 +25,7 @@ public class GameScreen extends GenericScreen {
 	
     private SpaceShip nave;
     private ArrayList<Asteroid> asteroides = new ArrayList<>();
+    private ArrayList<Asteroid> asteroidesGrandes = new ArrayList<>();
         
     private ArrayList<Projectile> balas = new ArrayList<>();
 	
@@ -63,9 +64,9 @@ public class GameScreen extends GenericScreen {
                     50 + r.nextInt((int) Gdx.graphics.getHeight() - 50));
             Vector2 velocity = new Vector2(velXAsteroides + r.nextInt(4), velYAsteroides + r.nextInt(4));
             Asteroid asteroid = director.BuildnormalAsteroid(position, velocity);
-            // Asteroid asteroid2 = director.BuildBigAsteroid(position, velocity);
+            Asteroid asteroid2 = director.BuildBigAsteroid(position, velocity);
             asteroides.add(asteroid);
-            //asteroides.add(asteroid2);
+            asteroidesGrandes.add(asteroid2);
         }
         
         nave.setProjectile( new NormalProjectile(Vector2.Zero, nave.getVelocity(), 100));
@@ -120,8 +121,11 @@ public class GameScreen extends GenericScreen {
 	for (Asteroid asteroid : asteroides) {
 	    asteroid.update(delta);
         }
+	for(Asteroid bigAsteroid:asteroidesGrandes) {
+		bigAsteroid.update(delta);
+	}
 		
-	if (asteroides.isEmpty()) {
+	if (asteroides.isEmpty() && asteroidesGrandes.isEmpty()) {
             Screen ss = new GameScreen(getGame(), 800, 640 ,ronda+1, nave.getVidas(), score, 
 					velXAsteroides+3, velYAsteroides+3, cantAsteroides+10);
 			
@@ -154,7 +158,16 @@ public class GameScreen extends GenericScreen {
 	        nave.setHerido();
 	        break;
 	    }
+     }
+	
+	for (Asteroid bigAsteroid : asteroidesGrandes) {
+        bigAsteroid.draw(getBatch());
+        if (nave.checkCollision(bigAsteroid)) {
+            asteroidesGrandes.remove(bigAsteroid);
+            nave.setHerido();
+            break;
         }
+    }
 	      
 	dibujaEncabezado();
 	endBatch();
@@ -186,6 +199,19 @@ public class GameScreen extends GenericScreen {
                     break;
                 }
             }
+            for (int j = 0; j < asteroidesGrandes.size(); j++) {
+                Asteroid bigAsteroid = asteroidesGrandes.get(j);
+                if (p.checkCollision(bigAsteroid)) {
+                    bigAsteroid.setHerido();
+                    explosionSound.play();
+
+                    if (bigAsteroid.estaDestruido()) {
+                        asteroidesGrandes.remove(bigAsteroid);
+                        score += 20;
+                        break;
+                    }
+                }
+            }
 		                
             // b.draw(batch);
             if (p.isDestroyed()) {
@@ -199,15 +225,27 @@ public class GameScreen extends GenericScreen {
             Asteroid asteroid1 = asteroides.get(i);   
             
             for (int j=0;j<asteroides.size();j++) {
-		Asteroid asteroid2 = asteroides.get(j); 
-		    	
-		if (asteroid1.getCollision().overlaps(asteroid2.getCollision())) {
-		    asteroid1.invertirDireccion();
-		    asteroid2.invertirDireccion();
-		}
+				Asteroid asteroid2 = asteroides.get(j); 
+				    	
+				if (asteroid1.getCollision().overlaps(asteroid2.getCollision())) {
+				    asteroid1.invertirDireccion();
+				    asteroid2.invertirDireccion();
+				}
+            }
+        }
+        
+        for (int i = 0; i < asteroidesGrandes.size(); i++) {
+            Asteroid bigAsteroid1 = asteroidesGrandes.get(i);
+            for (int j = 0; j < asteroidesGrandes.size(); j++) {
+                Asteroid bigAsteroid2 = asteroidesGrandes.get(j);
+                if (bigAsteroid1.getCollision().overlaps(bigAsteroid2.getCollision())) {
+                    bigAsteroid1.invertirDireccion();
+                    bigAsteroid2.invertirDireccion();
+                }
             }
         }
     }
+    
         
     public boolean agregarBala(Projectile p) {
         return balas.add(p);

@@ -17,7 +17,7 @@ public class Asteroid implements IGameObject {
 	private boolean herido = false;
 	private boolean destruida = false;
 	
-	 Asteroid(Vector2 position, Vector2 velocity,float speed ,int vidas,Sprite sprite) {
+	 Asteroid(Vector2 position, Vector2 velocity,float speed ,int vidas,Sprite sprite,Rectangle collisionRectangle) {
 		this.vidas=vidas;
 		this.sprite=sprite;
 		//sprite=new Sprite(new Texture(Gdx.files.internal("aGreyMedium4.png")));
@@ -25,7 +25,8 @@ public class Asteroid implements IGameObject {
     	sprite.setPosition(position.x,position.y);
     	this.velocity = velocity;
     	this.speed= speed;
-    	collisionRectangle = new Rectangle(position.x, position.y, sprite.getWidth(), sprite.getHeight());
+    	this.collisionRectangle=collisionRectangle;
+    	//collisionRectangle = new Rectangle(position.x, position.y, sprite.getWidth(), sprite.getHeight());
     	sprite.setBounds(position.x, position.y, 45, 45);
 
 
