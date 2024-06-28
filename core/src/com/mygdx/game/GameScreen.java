@@ -47,7 +47,7 @@ public class GameScreen extends GenericScreen {
 		gameMusic.play();
 		
 	    // cargar imagen de la nave, 64x64   
-		nave = SpaceShip.getInstance(width / 2 - 50, 30);
+		nave = SpaceShip.getInstance();
 	    
         nave.setVidas(vidas);
         
@@ -81,7 +81,7 @@ public class GameScreen extends GenericScreen {
 	    	Screen ss = new GameOverScreen(getGame(), 1200, 800);
 			ss.resize(1200, 800);
 			getGame().setScreen(ss);
-			//nave.reset();
+			nave.reset();
 			dispose();
 		}
 		
