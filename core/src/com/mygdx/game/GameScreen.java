@@ -58,15 +58,37 @@ public class GameScreen extends GenericScreen {
         
         Random r = new Random();
 
-        for (int i = 0; i < cantAsteroides; i++) {
-        	Director director = new Director(new AsteroidBuilder());
+        for (int i = 0; i < cantAsteroides/2; i++) {
+        	AsteroidBuilder astBuilder = new AsteroidBuilder();
+        	Director director = new Director(astBuilder);
             Vector2 position = new Vector2(r.nextInt((int) Gdx.graphics.getWidth()),
                     50 + r.nextInt((int) Gdx.graphics.getHeight() - 50));
             Vector2 velocity = new Vector2(velXAsteroides + r.nextInt(4), velYAsteroides + r.nextInt(4));
-            Asteroid asteroid = director.BuildnormalAsteroid(position, velocity);
-            Asteroid asteroid2 = director.BuildBigAsteroid(position, velocity);
-            asteroides.add(asteroid);
-            asteroidesGrandes.add(asteroid2);
+            
+            director.BuildnormalAsteroid(position, velocity);
+            asteroides.add(astBuilder.build());
+            position = new Vector2(r.nextInt((int) Gdx.graphics.getWidth()),
+                    50 + r.nextInt((int) Gdx.graphics.getHeight() - 50));
+            velocity = new Vector2(velXAsteroides + r.nextInt(4), velYAsteroides + r.nextInt(4));
+            director.BuildBigAsteroid(position, velocity);
+            asteroides.add(astBuilder.build());
+            
+            //Añadir asteroides grandes
+            BigAsteroidBuilder astBuilderBig = new BigAsteroidBuilder();
+            
+            director.changeBuilder((Builder) astBuilderBig);
+            position = new Vector2(r.nextInt((int) Gdx.graphics.getWidth()),
+                    50 + r.nextInt((int) Gdx.graphics.getHeight() - 50));
+            velocity = new Vector2(velXAsteroides + r.nextInt(4), velYAsteroides + r.nextInt(4));
+            
+            director.BuildnormalAsteroid(position, velocity);
+            asteroidesGrandes.add(astBuilderBig.build());
+            position = new Vector2(r.nextInt((int) Gdx.graphics.getWidth()),
+                    50 + r.nextInt((int) Gdx.graphics.getHeight() - 50));
+            velocity = new Vector2(velXAsteroides + r.nextInt(4), velYAsteroides + r.nextInt(4));
+            director.BuildBigAsteroid(position, velocity);
+            asteroidesGrandes.add(astBuilderBig.build());
+
         }
         
         nave.setProjectile( new NormalProjectile(Vector2.Zero, nave.getVelocity(), 100));
@@ -178,9 +200,12 @@ public class GameScreen extends GenericScreen {
         if (nave.estaHerido()) return;
 		
         // colisiones entre balas y asteroides y su destruccion  
-    
+        
+        
+       
+        
         for (int i = 0; i < balas.size(); i++) {
-	    
+        	
             Projectile p = balas.get(i);
             p.update(delta);
 		    
@@ -198,8 +223,11 @@ public class GameScreen extends GenericScreen {
                     score += 10;
                     break;
                 }
+                
             }
+            
             for (int j = 0; j < asteroidesGrandes.size(); j++) {
+            	
                 Asteroid bigAsteroid = asteroidesGrandes.get(j);
                 if (p.checkCollision(bigAsteroid)) {
                     bigAsteroid.setHerido();
@@ -212,7 +240,7 @@ public class GameScreen extends GenericScreen {
                     }
                 }
             }
-		                
+                      
             // b.draw(batch);
             if (p.isDestroyed()) {
                 balas.remove(p);
@@ -230,9 +258,10 @@ public class GameScreen extends GenericScreen {
 				if (asteroid1.getCollision().overlaps(asteroid2.getCollision())) {
 				    asteroid1.invertirDireccion();
 				    asteroid2.invertirDireccion();
-				}
-            }
-        }
+					}
+	            }
+	        }
+         
         
         for (int i = 0; i < asteroidesGrandes.size(); i++) {
             Asteroid bigAsteroid1 = asteroidesGrandes.get(i);
@@ -241,9 +270,10 @@ public class GameScreen extends GenericScreen {
                 if (bigAsteroid1.getCollision().overlaps(bigAsteroid2.getCollision())) {
                     bigAsteroid1.invertirDireccion();
                     bigAsteroid2.invertirDireccion();
-                }
-            }
-        }
+                	}
+            	}
+        	}
+        
     }
     
         

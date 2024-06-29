@@ -9,12 +9,12 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Asteroid implements IGameObject {
 	private int vidas = 1;
-	private float speed;
-	private final Vector2 velocity;
-	private Vector2 position;
-	private Sprite sprite;
-	private Rectangle collisionRectangle;
-	private boolean herido = false;
+	protected float speed;
+	protected final Vector2 velocity;
+	protected Vector2 position;
+	protected Sprite sprite;
+	protected Rectangle collisionRectangle;
+	protected boolean herido = false;
 	private boolean destruida = false;
 	
 	 Asteroid(Vector2 position, Vector2 velocity,float speed ,int vidas,Sprite sprite,Rectangle collisionRectangle) {

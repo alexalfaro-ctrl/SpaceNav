@@ -16,7 +16,7 @@ public class SpaceShip implements IGameObject {
 	
     private int vidas = 3;
     private float speed;
-    private Vector2 velocity;
+    private Vector2  velocity;
     private Sprite sprite;
     private Sound sonidoHerido;
     private boolean destruida = false;

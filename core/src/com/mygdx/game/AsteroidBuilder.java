@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class AsteroidBuilder implements Builder {
-    private int vidas = 1;
+    private int vidas;
     private float speed;
     private final Vector2 velocity;
     private Vector2 position;
@@ -16,7 +16,8 @@ public class AsteroidBuilder implements Builder {
     
     
     public AsteroidBuilder() {
-        this.velocity = new Vector2();
+        this.velocity = new Vector2(0,0);
+		this.reset();
     }
 
     public AsteroidBuilder sprite(Sprite sprite) {
@@ -52,10 +53,22 @@ public class AsteroidBuilder implements Builder {
         return this;
     }
 
-    public Asteroid build() {
-        return new Asteroid(position, velocity, speed, vidas, sprite,collisionRectangle);
-    }
-    public BigAsteroid buildBigAsteroid() {
+    public BigAsteroid build() {
         return new BigAsteroid(position, velocity, speed, vidas, sprite,collisionRectangle);
     }
+
+	@Override
+	public Builder reset() {
+		// TODO Auto-generated method stub
+		int vidas = 1;
+		float speed = 0;
+	    Vector2 velocity = new Vector2(0,0);
+	    Vector2 position = new Vector2(0,0);
+	    Sprite sprite = null;
+	    Rectangle collisionRectangle = null;
+		return this;
+	}
+    
+
+	
 }
