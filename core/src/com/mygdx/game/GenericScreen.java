@@ -19,8 +19,29 @@ public abstract class GenericScreen implements Screen {
 		deltaTime = 0;
 	}
 	
+	protected abstract void uiBuilder();
+	
+	protected abstract void onInput();
 	protected abstract void onUpdate(float delta);
-	protected abstract void onRender();
+	protected void onRender()
+	{
+		clearScreen(0,0,0);
+	}
+	
+	
+	protected void runScreen(float delta)
+	{
+		deltaTime= delta;
+		onInput();
+		onUpdate(delta);
+		//Se calcula toda la logica
+		beginBatch();
+		uiBuilder();
+		onRender();
+		endBatch();
+		//Se renderiza
+	}
+	
 	
 	public SpaceNavigation getGame() {
 		return game;
@@ -78,9 +99,7 @@ public abstract class GenericScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		deltaTime = delta;
-		onUpdate(delta); // Lo sé...
-		onRender();
+		runScreen(delta);
 	}
 
 

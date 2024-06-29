@@ -22,7 +22,7 @@ public class GameScreen extends GenericScreen {
     private int velXAsteroides; 
     private int velYAsteroides; 
     private int cantAsteroides;
-	
+	private boolean isShooting;
     private SpaceShip nave;
     private ArrayList<Asteroid> asteroides = new ArrayList<>();
     private ArrayList<Asteroid> asteroidesGrandes = new ArrayList<>();
@@ -34,6 +34,7 @@ public class GameScreen extends GenericScreen {
     {
     	super(game, width, height);
 		
+    	this.isShooting=false;
     	this.ronda = ronda;
     	this.score = score;
     	this.velXAsteroides = velXAsteroides;
@@ -94,6 +95,25 @@ public class GameScreen extends GenericScreen {
         nave.setProjectile( new NormalProjectile(Vector2.Zero, nave.getVelocity(), 100));
     }
     
+    
+    @Override
+	protected void uiBuilder() {
+ 
+    	CharSequence str = "Vidas: "+nave.getVidas()+" Ronda: "+ronda;
+    	getGame().getFont().getData().setScale(2f);		
+    	drawText(str, 10, 30);
+    	drawText("Score:"+this.score, Gdx.graphics.getWidth() - 150, 30);
+    	drawText("HighScore:" + getGame().getHighScore(), Gdx.graphics.getWidth()/2-100, 30);
+    
+	}
+
+	@Override
+	protected void onInput() {
+		// TODO Auto-generated method stub
+		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+			isShooting=true;
+	}
+	
     // TODO: Fix this crap
     public static GameScreen getInstance(SpaceNavigation game, int width, int height, int ronda, int vidas, int score,
             int velXAsteroides, int velYAsteroides, int cantAsteroides) {
@@ -126,7 +146,8 @@ public class GameScreen extends GenericScreen {
 	}
         
 		//spawnear bullets
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (this.isShooting) {
+        	isShooting=false;
             //Ajustar para que la bullet aparezca frente a la nave
             Vector2 bulletPos = nave.getPosition(); 
             Rectangle collision = nave.getCollision();
@@ -161,7 +182,7 @@ public class GameScreen extends GenericScreen {
     protected void onRender() {
     
         clearScreen(0, 0, 51);	
-	beginBatch();
+        
 			
 	//dibujar balas
         for (Projectile p : balas) {
@@ -191,8 +212,8 @@ public class GameScreen extends GenericScreen {
         }
     }
 	      
-	dibujaEncabezado();
-	endBatch();
+	
+	
     }
     
     public void colisiones(float delta) {
@@ -282,13 +303,7 @@ public class GameScreen extends GenericScreen {
     }
 
     
-    public void dibujaEncabezado() {
-	CharSequence str = "Vidas: "+nave.getVidas()+" Ronda: "+ronda;
-	getGame().getFont().getData().setScale(2f);		
-	drawText(str, 10, 30);
-	drawText("Score:"+this.score, Gdx.graphics.getWidth() - 150, 30);
-	drawText("HighScore:" + getGame().getHighScore(), Gdx.graphics.getWidth()/2-100, 30);
-    }
+    
 	
     @Override
     public void show() {
@@ -300,4 +315,6 @@ public class GameScreen extends GenericScreen {
         this.explosionSound.dispose();
         this.gameMusic.dispose();
     }
+
+	
 }
