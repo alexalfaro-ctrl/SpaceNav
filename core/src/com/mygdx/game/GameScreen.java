@@ -112,6 +112,14 @@ public class GameScreen extends GenericScreen {
 		// TODO Auto-generated method stub
 		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
 			isShooting=true;
+                
+                if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
+                    nave.setProjectile( new NormalProjectile(Vector2.Zero, nave.getVelocity(), 100));
+                }
+                
+                if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+                    nave.setProjectile( new ExplosiveProjectile(Vector2.Zero, nave.getVelocity(), 20));
+                }
 	}
 	
     // TODO: Fix this crap
@@ -155,7 +163,7 @@ public class GameScreen extends GenericScreen {
             
             nave.getProjectile().setPosition(bulletPos);
             nave.getProjectile().setVelocity(nave.getVelocity());
-            nave.getProjectile().setSpeed(100);
+            //nave.getProjectile().setSpeed(100);
 
             agregarBala(nave.getProjectile().create(bulletPos));
 	}
